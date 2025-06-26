@@ -1,5 +1,6 @@
 import * as path from "path";
 import { workspace, ExtensionContext } from "vscode";
+import log from "./log.js";
 
 import {
   LanguageClient,
@@ -10,21 +11,39 @@ import {
 
 let client: LanguageClient;
 
-export function activate(context: ExtensionContext) {
-  // The server is implemented in node
-  const serverModule = context.asAbsolutePath(
-    path.join("server", "out", "server.js")
-  );
+process.stdin.on("data", (chunk) => {
+  log.write(chunk.toString());
+});
 
-  // If the extension is launched in debug mode then the debug server options are used
-  // Otherwise the run options are used
+export function activate(context: ExtensionContext) {
+
+  //the path to server
+  const serverExecutable = context.asAbsolutePath(
+    path.join("..","..", "cmake-build-debugwithflag", "my-lsp-server") // or "my-lsp-server.exe" on Windows
+  );
+  // The server is implemented in node
+  // const serverModule = context.asAbsolutePath(
+  //   path.join("server", "out", "server.js")
+  // );
+
+  // // If the extension is launched in debug mode then the debug server options are used
+  // // Otherwise the run options are used
+  // const serverOptions: ServerOptions = {
+  //   run: { module: serverModule, transport: TransportKind.ipc },
+  //   debug: {
+  //     module: serverModule,
+  //     transport: TransportKind.ipc,
+  //   },
+  // };
+
+
   const serverOptions: ServerOptions = {
-    run: { module: serverModule, transport: TransportKind.ipc },
-    debug: {
-      module: serverModule,
-      transport: TransportKind.ipc,
-    },
-  };
+    command: serverExecutable,
+    args: [],
+    options: {
+      env: process.env,
+    }
+  }
 
   // Options to control the language client
   const clientOptions: LanguageClientOptions = {
@@ -38,12 +57,11 @@ export function activate(context: ExtensionContext) {
 
   // Create the language client and start the client.
   client = new LanguageClient(
-    "REPLACE_ME language-server-id",
-    "REPLACE_ME language server name",
+    "TEST-LSP language-server-id",
+    "TEST-LSP language server name",
     serverOptions,
     clientOptions
   );
-
   // Start the client. This will also launch the server
   client.start();
 }
