@@ -1,6 +1,5 @@
 import * as path from "path";
 import { workspace, ExtensionContext } from "vscode";
-import log from "./log.js";
 
 import {
   LanguageClient,
@@ -11,15 +10,15 @@ import {
 
 let client: LanguageClient;
 
-process.stdin.on("data", (chunk) => {
-  log.write(chunk.toString());
-});
 
 export function activate(context: ExtensionContext) {
 
   //the path to server
   const serverExecutable = context.asAbsolutePath(
-    path.join("..","..", "cmake-build-debugwithflag", "my-lsp-server") // or "my-lsp-server.exe" on Windows
+    // release
+    // path.join("..","..", "cmake-build-release", "my-lsp-server")
+    //debug
+    path.join("..","..", "cmake-build-debugwithflag", "my-lsp-server")
   );
   // The server is implemented in node
   // const serverModule = context.asAbsolutePath(
@@ -48,7 +47,7 @@ export function activate(context: ExtensionContext) {
   // Options to control the language client
   const clientOptions: LanguageClientOptions = {
     // Register the server for all documents by default
-    documentSelector: [{ scheme: "file", language: "*" }],
+    documentSelector: [{ scheme: "file", language: "swift" }],
     synchronize: {
       // Notify the server about file changes to '.clientrc files contained in the workspace
       fileEvents: workspace.createFileSystemWatcher("**/.clientrc"),
