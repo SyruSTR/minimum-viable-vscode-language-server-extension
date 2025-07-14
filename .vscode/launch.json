@@ -2,11 +2,29 @@
 {
   "version": "0.2.0",
   "configurations": [
+        {
+      "type": "extensionHost",
+      "request": "launch",
+      "name": "Launch Client (Release Server)",
+      "runtimeExecutable": "${execPath}",
+      "env": {
+        "LSP_SERVER_BUILD": "release"
+      },
+      "args": ["--extensionDevelopmentPath=${workspaceRoot}"],
+      "outFiles": ["${workspaceRoot}/client/out/**/*.js"],
+      "preLaunchTask": {
+        "type": "npm",
+        "script": "watch"
+      }
+    },
     {
       "type": "extensionHost",
       "request": "launch",
-      "name": "Launch Client",
+      "name": "Launch Client (Debug Server)",
       "runtimeExecutable": "${execPath}",
+      "env": {
+        "LSP_SERVER_BUILD": "debug"
+      },
       "args": ["--extensionDevelopmentPath=${workspaceRoot}"],
       "outFiles": ["${workspaceRoot}/client/out/**/*.js"],
       "preLaunchTask": {

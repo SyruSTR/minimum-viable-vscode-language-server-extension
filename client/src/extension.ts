@@ -15,10 +15,9 @@ export function activate(context: ExtensionContext) {
 
   //the path to server
   const serverExecutable = context.asAbsolutePath(
-    // release
-    path.join("..","..", "tmp-cmake-build-release", "my-lsp-server")
-    //debug
-    // path.join("..","..", "cmake-build-debugwithflag", "my-lsp-server")
+    process.env.LSP_SERVER_BUILD === "release"
+      ? path.join("..", "..", "tmp-cmake-build-release", "my-lsp-server")
+      : path.join("..", "..", "cmake-build-debugwithflag", "my-lsp-server")
   );
   // The server is implemented in node
   // const serverModule = context.asAbsolutePath(
